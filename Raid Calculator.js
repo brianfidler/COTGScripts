@@ -1,6 +1,6 @@
 // ==UserScript==
-// @name                CotG Testing
-// @description         testing
+// @name                CotG Raid Calculator
+// @description         Simple In-Game raid calculator
 // @author              ChrisMack
 // @include          https://*.crownofthegods.com/
 // @version          0.0.1
@@ -40,8 +40,17 @@
     });
 
     document.getElementById('raidDungGo').addEventListener('click', function() {
-        if(selected.type !== null && selected.troops !== null) {
-           addToRaidTable();
+        if (selected.type !== null && selected.troops !== null) {
+            addToRaidTable();
+        }
+    });
+
+    // Re add buttons when raid button is clicked
+    document.getElementById('raidGo').addEventListener('click', function() {
+        if (selected.type !== null && selected.troops !== null) {
+            setTimeout(function() {
+                addToRaidTable();
+            }, 100);
         }
     });
 
@@ -95,7 +104,7 @@
 
     var displayToopList = function(data) {
         if ($('#troopGuide').length < 1) {
-           createTroopList();
+            createTroopList();
         }
         insertTroops();
 
@@ -130,18 +139,18 @@
         var container = $('<div></div>');
         container.attr({'id': 'extraContainer'});
         container.css({
-           'display': 'block',
-           'padding-top': '10px',
-           'float': 'right'
+            'display': 'block',
+            'padding-top': '10px',
+            'float': 'right'
         });
         container.append('<span>Extra Carry (%)</span>');
 
         var extraPercent = $('<input></input>');
         extraPercent.attr({'id': 'extraPercent'});
         extraPercent.css({
-           'width': '40px',
-           'height': '20px',
-           'margin-left': '5px'
+            'width': '40px',
+            'height': '20px',
+            'margin-left': '5px'
         });
         extraPercent.keyup(onPercentChange);
 
@@ -158,36 +167,36 @@
     // Rebuilds table when extra carry percentage is changed
     var onPercentChange = function(e) {
         if (!isNaN(e.target.value)) {
-           var value = e.target.value;
-           if (value === '') {
-             value = 0;
-           }
+            var value = e.target.value;
+            if (value === '') {
+                value = 0;
+            }
 
-           var troopGuide = $('#troopGuide');
-           $('#troopTable').remove();
-           var troops = getTroops(getRequiredTS(selected.lvl, selected.prog, parseInt(value, 10)), selected.type);
-           troopGuide.append(buildTroopTable(troops));
+            var troopGuide = $('#troopGuide');
+            $('#troopTable').remove();
+            var troops = getTroops(getRequiredTS(selected.lvl, selected.prog, parseInt(value, 10)), selected.type);
+            troopGuide.append(buildTroopTable(troops));
         }
     };
 
     var buildTroopTable = function(troops) {
         var content = $('<table>' +
-           '<tr><td style="text-align: center">Unit</td>' +
-           '<td style="text-align: center">Count</td>' +
-           '<td style="text-align: center">Recommended</td></tr></table>');
+            '<tr><td style="text-align: center">Unit</td>' +
+            '<td style="text-align: center">Count</td>' +
+            '<td style="text-align: center">Recommended</td></tr></table>');
         content.attr({'id': 'troopTable'});
         content.css({
-           'width': '100%',
-           'font-size': '140%',
-           'padding': '2% 0 0 2%'
+            'width': '100%',
+            'font-size': '140%',
+            'padding': '2% 0 0 2%'
         });
 
         for (var i in troops) {
-           content.find('tr').last().after('<tr>' +
-             '<td style="text-align: center">' + troops[i].troop + '</td>' +
-             '<td style="text-align: center">' + troops[i].count + '</td>' +
-             '<td style="text-align: center">' + (troops[i].rec ? 'Yes' : 'No') + '</td>' +
-         '</tr>');
+            content.find('tr').last().after('<tr>' +
+                '<td style="text-align: center">' + troops[i].troop + '</td>' +
+                '<td style="text-align: center">' + troops[i].count + '</td>' +
+                '<td style="text-align: center">' + (troops[i].rec ? 'Yes' : 'No') + '</td>' +
+                '</tr>');
         }
         return content;
     };
