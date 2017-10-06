@@ -14,6 +14,8 @@
 
     //Loot for cavern at 100%
     var baseloot = [360, 1040, 4400, 16000, 33600, 57600, 120000, 204800, 304000, 464000];
+
+    // Populated when a dungeon is clicked in region view
     var selected = {
         lvl: null,
         prog: null,
@@ -21,6 +23,7 @@
         troops: null
     };
 
+    // List for region view clicks
     cotgsubscribe.subscribe('regional', function(data) {
         selected.type = data.info.type;
         if (data.type === 'dungeon') {
