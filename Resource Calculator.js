@@ -94,6 +94,9 @@
     });
     transportTimeHeader.append(ttInput.get(0));
 
+    /*
+     * Reset changes after req table has been refreshed
+     */
     var reset = function() {
         var ttInput = $('#reqResAriB');
         if(ttInput !== undefined) {
@@ -109,34 +112,7 @@
     // Listen for changes in the req res table
     reqTable.bind('DOMNodeInserted', function(e) {
         if (e.target.id !== '') {
-            // Clear travel time check button
             reset();
-
-            var reqRow = $('#' + e.target.id);
-            var time = reqRow.get(0).children[2].innerHTML.split(':');
-            for (var i in time) {
-                time[i] = parseInt(time[i], 10);
-            }
-
-            // Convert array to seconds
-            var timeInSeconds = (time[0] * 3600) + time[1] * 60 + time[2];
-
-            var resTypeId = $('input[name=reqresra]:checked').get(0).id;
-            var resType = resTypeId.substr(0, resTypeId.length - 8);
-
-            var resources = cotg.city.resources();
-            var incoming = {
-                wood: parseInt($('#incw').html().replace(',', '')),
-                stone: parseInt($('#incs').html().replace(',', '')),
-                iron: parseInt($('#inci').html().replace(',', '')),
-                food: parseInt($('#incf').html().replace(',', ''))
-            };
-            var madeInTransport = resources[resType + '_ph'] / (3600 / timeInSeconds);
-            var needed = resources[resType + '_st'] - resources[resType];
-
-            var optimisedReq = needed - incoming[resType] - madeInTransport;
-
-            console.log(optimisedReq);
         }
     });
 
