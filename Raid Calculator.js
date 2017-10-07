@@ -177,7 +177,7 @@
 
             var troopGuide = $('#troopGuide');
             $('#troopTable').remove();
-            var troops = getTroops(getRequiredTS(selected.lvl, selected.prog, parseInt(value, 10)), selected.type);
+            var troops = getTroops(getRequiredTS(selected.lvl, selected.prog, parseFloat(value)), selected.type);
             troopGuide.append(buildTroopTable(troops));
         }
     };
